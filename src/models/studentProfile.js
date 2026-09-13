@@ -34,11 +34,15 @@ const studentProfileSchema = new mongoose.Schema(
     },
 
     location: {
-      latitude: {
-        type: Number,
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+        default: "Point",
       },
-      longitude: {
-        type: Number,
+      coordinates: {
+        type: [Number],
+        required: true,
       },
     },
 
@@ -86,6 +90,7 @@ const studentProfileSchema = new mongoose.Schema(
     strict: "throw",
   }
 );
+studentProfileSchema.index({ location: "2dsphere" });
 
 export const StudentProfile = mongoose.model(
   "StudentProfile",

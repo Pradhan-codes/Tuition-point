@@ -3,9 +3,11 @@ import { updateStudentProfile, getStudentProfile } from "../controllers/studentC
 import { createRequest, getMyRequests } from "../controllers/requestController.js";
 import { authenticate, authorize } from "../middlewares/authMiddleware.js";
 import { validateStudentProfile, validateCreateRequest } from "../middlewares/validate.js";
+import { searchTeachers } from "../controllers/teacherController.js";
 
 export const studenRouter = e.Router()
 
+studenRouter.get("/search", searchTeachers)
 studenRouter.use(authenticate, authorize("student"));
 studenRouter.route("/profile").get(getStudentProfile).post(validateStudentProfile, updateStudentProfile);
 
