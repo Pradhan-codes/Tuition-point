@@ -5,18 +5,27 @@ node_modules/
 .env
 .env.*
 !.env.example
+*.local
 
 # Build output
 dist/
+dist-ssr/
 build/
-
-# Test coverage
-coverage/
 
 # Logs
 *.log
+logs/
+
+# Test coverage
+coverage/
 
 # OS/editor files
 .DS_Store
 Thumbs.db
 .vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
