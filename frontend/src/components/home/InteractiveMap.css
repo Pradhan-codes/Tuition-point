@@ -1,0 +1,418 @@
+﻿.map-section {
+  padding: 8px 0 36px 0;
+  width: 100%;
+}
+
+.map-container {
+  width: 100%;
+}
+
+.map-viewport-card {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  background-color: #f1f5f9;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+/* Map Canvas */
+.map-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+
+.map-vector-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Top Left Proximity Indicator Pill */
+.map-top-left-pill {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
+}
+
+/* Top Right Controls */
+.map-top-right-controls {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  z-index: 10;
+}
+
+.map-layer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background-color: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(4px);
+  transition: all 0.15s ease;
+}
+
+.map-layer-toggle:hover {
+  background-color: #ffffff;
+  color: var(--color-text-main);
+  border-color: var(--color-border-hover);
+}
+
+/* Bottom Center 'Search this area' */
+.map-bottom-center {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.search-area-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 8px 18px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  transition: all 0.15s ease;
+}
+
+.search-area-pill:hover {
+  border-color: var(--color-primary-border);
+  color: var(--color-primary);
+  transform: scale(1.02);
+}
+
+/* Bottom Right Zoom Controls */
+.map-zoom-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.zoom-btn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  transition: background-color 0.15s ease;
+}
+
+.zoom-btn:hover {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-main);
+}
+
+.zoom-divider {
+  width: 22px;
+  height: 1px;
+  background-color: var(--color-border);
+}
+
+/* Map Markers: User Location */
+.user-location-marker {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 12;
+  cursor: pointer;
+}
+
+.user-location-pill {
+  background-color: #0f172a;
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+
+.user-location-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: #38bdf8;
+}
+
+.user-location-arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #0f172a;
+}
+
+/* Map Markers: Rate Badges (£45/h · 0.4 mi) */
+.rate-marker {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 11;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.rate-marker:hover {
+  transform: translate(-50%, -105%) scale(1.05);
+}
+
+.rate-pill {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-main);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+  white-space: nowrap;
+}
+
+.rate-sep {
+  color: var(--color-text-dim);
+}
+
+.rate-dist {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.rate-arrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #ffffff;
+}
+
+/* Landmark Pin (University Icon) */
+.landmark-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 9;
+}
+
+.landmark-bubble {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  background-color: #1d4ed8;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.3);
+}
+
+/* Featured Tutor Callout Card (Dr. Elena Rostova) */
+.featured-tutor-callout {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  margin-top: -10px;
+  z-index: 15;
+  filter: drop-shadow(0 14px 20px rgba(15, 23, 42, 0.15));
+}
+
+.callout-card {
+  width: 250px;
+  background-color: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.callout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.callout-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #15803d;
+  background-color: #dcfce7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.callout-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.star-icon {
+  color: var(--color-accent-gold);
+  font-size: 0.75rem;
+}
+
+.callout-rating {
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.callout-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.callout-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--color-border);
+  flex-shrink: 0;
+}
+
+.callout-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.callout-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.callout-subject {
+  font-size: 0.72rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.callout-distance {
+  font-size: 0.66rem;
+  color: var(--color-text-muted);
+}
+
+.callout-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.callout-price {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.price-val {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.price-unit {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.callout-cta {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+}
+
+.callout-cta:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.callout-pointer {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid #ffffff;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .map-viewport-card {
+    height: 380px;
+  }
+}

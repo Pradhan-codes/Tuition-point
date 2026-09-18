@@ -1,0 +1,227 @@
+﻿.hero-section {
+  padding: 44px 0 28px 0;
+  background-color: var(--color-bg-page);
+}
+
+.hero-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Active Tutors Status Pill */
+.active-tutors-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-primary-border);
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 18px;
+  letter-spacing: -0.01em;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  display: inline-block;
+  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.2);
+}
+
+/* Headline */
+.hero-headline {
+  font-size: clamp(2rem, 3.8vw, 2.75rem);
+  font-weight: 800;
+  color: var(--color-text-main);
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.headline-accent {
+  color: var(--color-primary);
+}
+
+/* Subtitle */
+.hero-subtitle {
+  font-size: 1.02rem;
+  color: var(--color-text-muted);
+  max-width: 720px;
+  margin-bottom: 30px;
+  line-height: 1.55;
+}
+
+/* Search Bar Card */
+.search-bar-card {
+  width: 100%;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  padding: 8px 10px 8px 20px;
+  gap: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 22px;
+}
+
+.search-bar-card:focus-within {
+  border-color: var(--color-primary-border);
+  box-shadow: 0 4px 12px -2px rgba(29, 78, 216, 0.12);
+}
+
+.search-segment {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.segment-icon {
+  color: var(--color-text-dim);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.segment-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.segment-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  letter-spacing: 0.06em;
+  margin-bottom: 3px;
+  cursor: pointer;
+}
+
+.segment-input {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  background: transparent;
+  width: 100%;
+}
+
+.segment-input::placeholder {
+  color: var(--color-text-dim);
+  font-weight: 400;
+}
+
+.search-divider {
+  width: 1px;
+  height: 38px;
+  background-color: var(--color-border);
+  flex-shrink: 0;
+}
+
+/* Find Teachers CTA Button */
+.find-teachers-button {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  color: #ffffff;
+  padding: 13px 26px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.3);
+  flex-shrink: 0;
+}
+
+.find-teachers-button:hover {
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.35);
+}
+
+.find-teachers-button:active {
+  transform: translateY(0);
+}
+
+/* Trending Chips */
+.trending-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.trending-label-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-muted);
+}
+
+.trending-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.trending-chips-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trending-chip {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  transition: all 0.15s ease;
+}
+
+.trending-chip:hover {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-main);
+}
+
+.trending-chip.active {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-border);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 860px) {
+  .search-bar-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .search-divider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .find-teachers-button {
+    justify-content: center;
+    width: 100%;
+  }
+}
