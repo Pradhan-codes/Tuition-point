@@ -1,7 +1,7 @@
 import  jwt  from "jsonwebtoken";
 import dotenv from "dotenv"
 
-const result = dotenv.config()
+const result = dotenv.config({ path: '../../.env' })
 
 export const generateToken = (userId, role) => {
     return jwt.sign({ id: userId, role},

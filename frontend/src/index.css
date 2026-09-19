@@ -3,6 +3,8 @@
    Design Reference: 1280x2178 Stitch UI Blueprint
    ========================================================================== */
 
+@import "tailwindcss";
+
 :root {
   /* Brand Color Palette */
   --color-primary: #1d4ed8;         /* High-contrast royal blue for CTA buttons */
@@ -51,6 +53,7 @@
   --radius-full: 9999px;
 }
 
+@layer base {
 /* Box Sizing & Element Reset */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -116,6 +119,7 @@ img {
   flex-direction: column;
   position: relative;
   width: 100%;
+}
 }
 
 /* Global Content Container */

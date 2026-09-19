@@ -3,7 +3,7 @@ import { compare, hash } from "bcryptjs";
 import dotenv from "dotenv";
 import { generateToken } from "../utils/generateToken.js";
 
-const result = dotenv.config()
+const result = dotenv.config({ path: '../../.env' })
 
 export const register = async (req, res) => {
     try {

@@ -1,7 +1,7 @@
 import { connect } from "mongoose";
 import dotenv from "dotenv";
 
-const result = dotenv.config()
+const result = dotenv.config({ path: '../../../.env' })
 
 async function connectDB(){
     try {

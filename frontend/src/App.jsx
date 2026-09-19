@@ -1,31 +1,31 @@
+import { Routes, Route } from 'react-router-dom';
+
 import Navbar from './components/common/Navbar';
-import HomePage from './pages/HomePage';
 import Footer from './components/common/Footer';
 import BottomNav from './components/common/BottomNav';
-import './App.css';
 
-/**
- * App Root Component
- * 
- * Sets up the primary shell for TuitionPoint Marketplace:
- * - Persistent Sticky Navbar
- * - Full-fidelity Home Landing Page
- * - Global Marketplace Footer
- * - Mobile-friendly Bottom Navigation Dock
- */
+import HomePage from './pages/HomePage';
+import FindTeachers from './pages/student/FindTeachers';
+
+import './App.css';
+import TeacherDetails from './pages/student/TeacherDetails';
+import TeacherRequests from './pages/teacher/TeacherRequests';
+import StudentRequests from './pages/student/StudentRequests';
+
 function App() {
   return (
     <div className="app-layout">
-      {/* Top Navigation Bar */}
       <Navbar />
 
-      {/* Main Marketplace Page Content */}
-      <HomePage />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/student/find-teachers" element={<FindTeachers />} />
+        <Route path="/student/teacher-details" element={<TeacherDetails />} />
+        <Route path="/student/my-requests" element={<StudentRequests />} />
+        <Route path="/teacher/my-requests" element={<TeacherRequests />} />
+      </Routes>
 
-      {/* Footer Links & Coverage Info */}
       <Footer />
-
-      {/* Persistent Bottom Mobile Navigation Bar */}
       <BottomNav />
     </div>
   );

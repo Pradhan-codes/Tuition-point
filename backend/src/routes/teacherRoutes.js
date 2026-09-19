@@ -2,7 +2,7 @@ import e from "express";
 import { validateTeacherProfile, validateTeacherSearch } from "../middlewares/validate.js";
 import { authenticate, authorize } from "../middlewares/authMiddleware.js";
 import { respondToRequest, getMyRequests } from "../controllers/requestController.js";
-import { updateTeacherProfile, searchTeachers, getTeacherProfile } from "../controllers/teacherController.js";
+import { updateTeacherProfile, searchTeachers, getTeacherProfile, getTeacherById } from "../controllers/teacherController.js";
 
 export const teacherRouter = e.Router()
 
@@ -12,4 +12,5 @@ teacherRouter.route("/profile").get(authenticate, authorize("teacher"), getTeach
               .post(authenticate, authorize("teacher"), validateTeacherProfile, updateTeacherProfile);
 
 teacherRouter.get("/requests", authenticate, authorize("teacher"), getMyRequests)
+teacherRouter.get("/:id", getTeacherById);
 teacherRouter.patch("/requests/:id", authenticate, authorize("teacher"), respondToRequest)
