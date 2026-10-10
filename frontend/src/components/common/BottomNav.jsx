@@ -1,19 +1,39 @@
-import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/useAuth';
 import { BOTTOM_NAV_ITEMS } from '../../data/mockData';
 import './BottomNav.css';
 
 /**
  * BottomNav Component
- * 
- * Mobile/responsive bottom navigation dock offering one-tap access to:
- * - Explore (current active search & map view)
- * - Saved (favorites/wishlists)
- * - Bookings (scheduled lessons)
- * - Inbox (direct tutor messages)
- * - Profile (user settings & credentials)
+ *
+ * Mobile/responsive bottom navigation dock. Active tab is derived from
+ * the current URL so it stays in sync on page refresh and direct navigation.
+ * Tab destinations are role-aware (student vs. teacher).
  */
 const BottomNav = () => {
-  const [activeTab, setActiveTab] = useState('explore');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useAuth();
+
+  /** Map each tab id to a path based on user role */
+  const tabPaths = {
+    explore: user?.role === 'teacher' ? '/teacher/dashboard' : '/student/find-teachers',
+    saved:    '/student/find-teachers', // placeholder until saved page exists
+    bookings: user?.role === 'teacher' ? '/teacher/my-requests' : '/student/my-requests',
+    inbox:    '/',                       // placeholder until inbox page exists
+    profile:  user?.role === 'teacher' ? '/teacher/profile' : '/student/profile',
+  };
+
+  const getActiveTab = () => {
+    const path = location.pathname;
+    if (path.startsWith('/student/find-teachers')) return 'explore';
+    if (path.startsWith('/teacher/dashboard') || path.startsWith('/teacher/my-requests')) return 'explore';
+    if (path.startsWith('/student/my-requests'))  return 'bookings';
+    if (path.startsWith('/student/profile') || path.startsWith('/teacher/profile')) return 'profile';
+    return '';
+  };
+
+  const activeTab = getActiveTab();
 
   const renderIcon = (id) => {
     switch (id) {
@@ -67,7 +87,7 @@ const BottomNav = () => {
               key={item.id}
               type="button"
               className={`bottom-nav-tab ${isActive ? 'active' : ''}`}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => navigate(tabPaths[item.id])}
             >
               <div className="tab-icon-wrapper">
                 {renderIcon(item.id)}

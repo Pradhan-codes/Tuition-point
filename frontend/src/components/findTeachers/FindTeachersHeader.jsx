@@ -1,4 +1,4 @@
-import { MapPin, ShieldCheck } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 export default function FindTeachersHeader({ locationName, radius }) {
   return (
@@ -8,17 +8,17 @@ export default function FindTeachersHeader({ locationName, radius }) {
         {/* Status */}
         <div className="mb-5 flex items-center gap-2 text-sm font-medium text-blue-600">
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50">
-            <ShieldCheck size={15} />
+            <MapPin size={15} />
           </span>
 
-          <span>Verified teachers near you</span>
+          <span>{locationName ? `Teachers near ${locationName}` : "Choose a location to search"}</span>
         </div>
 
         {/* Heading */}
         <div className="max-w-3xl">
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
             Find the right teacher,
-            <span className="text-blue-600"> near you.</span>
+            <span className="text-blue-600"> near your search area.</span>
           </h1>
 
           <p className="mt-4 max-w-2xl text-base leading-7 text-slate-500 sm:text-lg">
@@ -33,12 +33,12 @@ export default function FindTeachersHeader({ locationName, radius }) {
             <MapPin size={16} className="text-blue-600" />
 
             <span>
-              {locationName || "Your current location"}
+              {locationName || "No location selected"}
             </span>
           </div>
 
           <span className="text-slate-400">
-            Searching within {radius} km
+            {locationName ? `Searching within ${radius} km` : `Search radius: ${radius} km`}
           </span>
         </div>
       </div>

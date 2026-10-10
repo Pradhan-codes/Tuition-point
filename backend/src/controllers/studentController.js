@@ -3,21 +3,36 @@ import { StudentProfile } from "../models/studentProfile.js";
 // Create or update student profile
 export const updateStudentProfile = async (req, res) => {
   try {
-    const { grade, subjectsNeeded, preferredMode } = req.body;
-
-    const profile = await StudentProfile.findOneAndUpdate(
-      { user: req.user._id },
-      { grade, subjectsNeeded, preferredMode, user: req.user._id },
-      { new: true, upsert: true, runValidators: true }
+    const allowedFields = [
+      "grade",
+      "board",
+      "subjectsNeeded",
+      "preferredMode",
+      "location",
+      "preferredRadius",
+      "budget",
+      "availability",
+      "learningPreferences",
+    ];
+    const updates = Object.fromEntries(
+      allowedFields
+        .filter((field) => Object.hasOwn(req.body, field))
+        .map((field) => [field, req.body[field]])
     );
 
-    res.status(200).json({
+    const profile = await StudentProfile.findOneAndUpdate(
+      { user: req.user.id },
+      { $set: { ...updates, user: req.user.id } },
+      { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
+    ).populate("user", "name email phone");
+
+    return res.status(200).json({
       success: true,
       message: "Student profile saved successfully",
       profile
     });
   } catch (err) {
-    res.status(409).json({success: false, message: "Request failed."})
+    return res.status(400).json({ success: false, message: err.message || "Could not save student profile." });
   }
 };
 

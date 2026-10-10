@@ -5,6 +5,7 @@ import TeacherHeader from "../../components/teacherDetails/TeacherHeader";
 import TeacherAbout from "../../components/teacherDetails/TeacherAbout";
 import TeacherLocationCard from "../../components/teacherDetails/TeacherLocationCard";
 import BookingRequestModal from "../../components/teacherDetails/BookingRequestModal";
+import { getTeacherById } from "../../services/teacherService";
 
 export default function TeacherDetails() {
   const { id } = useParams();
@@ -16,22 +17,36 @@ export default function TeacherDetails() {
   const [requestSent, setRequestSent] = useState(false);
 
   useEffect(() => {
+    if (!id) {
+      setError("No teacher identifier provided");
+      setLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
     let isMounted = true;
+
     const fetchTeacher = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        const res = await fetch(`/teachers/${id}`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Failed to load tutor");
+        const data = await getTeacherById(id, controller.signal);
         if (isMounted) setTeacher(data.teacher);
       } catch (err) {
-        if (isMounted) setError(err.message);
+        if (err.name === "AbortError") return;
+        if (isMounted) setError(err.message || "Failed to load tutor");
       } finally {
         if (isMounted) setLoading(false);
       }
     };
 
     fetchTeacher();
-    return () => { isMounted = false; };
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, [id]);
 
   if (loading) {
@@ -50,7 +65,7 @@ export default function TeacherDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-16">
+    <div className="min-h-screen bg-[#f8fafc] pb-28 sm:pb-16">
       <div className="max-w-5xl mx-auto px-4 pt-6">
         <button
           onClick={() => navigate(-1)}
@@ -94,6 +109,7 @@ export default function TeacherDetails() {
         onClose={() => setIsModalOpen(false)}
         teacherId={teacher.user?._id || teacher.user}
         subjects={teacher.subjects}
+        teachingMode={teacher.teachingMode}
         onSuccess={() => setRequestSent(true)}
       />
     </div>

@@ -89,6 +89,32 @@ export const validateStudentProfile = [
     .isIn(["online", "home", "both"])
     .withMessage("Preferred mode must be online, home, or both"),
 
+  body("board").optional().trim().isLength({ max: 100 }),
+  body("location.type")
+    .equals("Point")
+    .withMessage("Location type must be 'Point'"),
+  body("location.coordinates")
+    .isArray({ min: 2, max: 2 })
+    .withMessage("Coordinates must be [longitude, latitude]"),
+  body("location.coordinates.0")
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Longitude must be between -180 and 180"),
+  body("location.coordinates.1")
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Latitude must be between -90 and 90"),
+  body("preferredRadius").optional({ nullable: true }).isFloat({ min: 0 }),
+  body("budget").optional({ nullable: true }).isObject(),
+  body("budget.min").optional({ nullable: true }).isFloat({ min: 0 }),
+  body("budget.max").optional({ nullable: true }).isFloat({ min: 0 }),
+  body("availability").optional().isArray(),
+  body("availability.*.day")
+    .optional()
+    .isIn(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]),
+  body("availability.*.startTime").optional().matches(/^([01]\d|2[0-3]):[0-5]\d$/),
+  body("availability.*.endTime").optional().matches(/^([01]\d|2[0-3]):[0-5]\d$/),
+  body("learningPreferences").optional().isArray(),
+  body("learningPreferences.*").optional().trim().notEmpty(),
+
   handleValidationErrors
 ];
 
@@ -120,7 +146,7 @@ export const validateTeacherProfile = [
     .withMessage("Teaching mode must be online, home, or both"),
 
   body("experienceYears")
-    .optional()
+    .optional({ nullable: true })
     .isInt({ min: 0 })
     .withMessage("Experience years must be a non-negative integer"),
 
@@ -132,12 +158,22 @@ export const validateTeacherProfile = [
   body("location.coordinates")
     .isArray({ min: 2, max: 2 })
     .withMessage("Coordinates must be [longitude, latitude]"),
-  body("location.coordinates.*[0]")
+  body("location.coordinates.0")
     .isFloat({ min: -180, max: 180 })
     .withMessage("Longitude must be between -180 and 180"),
-  body("location.coordinates.*[1]")
+  body("location.coordinates.1")
     .isFloat({ min: -90, max: 90 })
     .withMessage("Latitude must be between -90 and 90"),
+
+  body("teachingRadius").optional({ nullable: true }).isFloat({ min: 0 }),
+  body("availability").optional().isArray(),
+  body("availability.*.day")
+    .optional()
+    .isIn(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]),
+  body("availability.*.startTime").optional().matches(/^([01]\d|2[0-3]):[0-5]\d$/),
+  body("availability.*.endTime").optional().matches(/^([01]\d|2[0-3]):[0-5]\d$/),
+  body("qualifications").optional().isArray(),
+  body("qualifications.*").optional().trim().notEmpty(),
 
   handleValidationErrors
 ];
@@ -187,6 +223,16 @@ export const validateTeacherSearch = [
     .withMessage("Limit must be between 1 and 100"),
 
   handleValidationErrors
+];
+
+export const validateLocationQuery = [
+  query("q")
+    .trim()
+    .notEmpty()
+    .withMessage("Enter a city or postal code")
+    .isLength({ min: 2, max: 160 })
+    .withMessage("Location must be between 2 and 160 characters"),
+  handleValidationErrors,
 ];
 
 // ==================== REQUEST / BOOKING VALIDATIONS ====================

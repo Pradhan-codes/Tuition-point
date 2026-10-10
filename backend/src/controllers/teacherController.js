@@ -3,21 +3,36 @@ import { TeacherProfile } from "../models/teacherProfile.js";
 // Create or update teacher profile
 export const updateTeacherProfile = async (req, res) => {
   try {
-    const { bio, subjects, hourlyRate, teachingMode, experienceYears } = req.body;
-
-    const profile = await TeacherProfile.findOneAndUpdate(
-      { user: req.user._id },
-      { bio, subjects, hourlyRate, teachingMode, experienceYears, user: req.user._id },
-      { new: true, upsert: true, runValidators: true }
+    const allowedFields = [
+      "bio",
+      "subjects",
+      "hourlyRate",
+      "teachingMode",
+      "experienceYears",
+      "location",
+      "teachingRadius",
+      "availability",
+      "qualifications",
+    ];
+    const updates = Object.fromEntries(
+      allowedFields
+        .filter((field) => Object.hasOwn(req.body, field))
+        .map((field) => [field, req.body[field]])
     );
 
-    res.status(200).json({
+    const profile = await TeacherProfile.findOneAndUpdate(
+      { user: req.user.id },
+      { $set: { ...updates, user: req.user.id } },
+      { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
+    ).populate("user", "name email phone");
+
+    return res.status(200).json({
       success: true,
       message: "Teacher profile saved successfully",
       profile
     });
   } catch (err) {
-    res.status(409).json({success: false, message: " Request failed."})
+    return res.status(400).json({ success: false, message: err.message || "Could not save teacher profile." });
   }
 };
 
@@ -178,8 +193,9 @@ export const getTeacherById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const teacher = await TeacherProfile.findOne({ user: id })
-      .populate("user", "name email");
+    const teacher = await TeacherProfile.findOne({
+      $or: [{ user: id }, { _id: id }]
+    }).populate("user", "name email");
 
     if (!teacher) {
       return res.status(404).json({

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { HERO_DATA } from '../../data/mockData';
+import { useNavigate } from 'react-router-dom';
 import './HeroSearch.css';
 
 /**
@@ -11,18 +12,24 @@ import './HeroSearch.css';
  * - Two-part search input card (Subject/Goal + Location/Radius)
  * - Trending subject quick-filter chips
  * 
- * NOTE FOR BACKEND INTEGRATION:
- * - `handleSearch` can dispatch an Axios request to `/api/teachers/search?subject=${subject}&lng=...&lat=...&radius=5`
+ * The selected subject and entered location are passed to the existing teacher search page.
  */
 const HeroSearch = () => {
+  const navigate = useNavigate();
+
   const [subject, setSubject] = useState(HERO_DATA.defaultSubject);
-  const [location, setLocation] = useState(HERO_DATA.defaultLocation);
+  const [location, setLocation] = useState('');
   const [selectedTrending, setSelectedTrending] = useState('GCSE Maths');
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log('[Search Query]:', { subject, location });
-    // TODO: Wire up to backend /api/teachers/search
+
+    navigate('/student/find-teachers', {
+      state: {
+        subject,
+        location
+      }
+    });
   };
 
   const handleTrendingClick = (tag) => {
@@ -87,11 +94,12 @@ const HeroSearch = () => {
             </div>
             <div className="segment-content">
               <label htmlFor="location-input" className="segment-label">
-                YOUR LOCATION
+                SEARCH LOCATION
               </label>
               <input
                 id="location-input"
                 type="text"
+                required
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="Enter postal code or town"

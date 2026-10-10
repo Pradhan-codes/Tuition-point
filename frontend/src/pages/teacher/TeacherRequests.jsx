@@ -10,47 +10,64 @@ export default function TeacherRequests() {
   
 
   useEffect(() => {
+    const controller = new AbortController();
+    let isMounted = true;
     const fetchRequests = async () => {
     try {
-      const res = await fetch("/teachers/requests");
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to load inquiries");
-      setRequests(data.requests || []);
+      const res = await fetch("/teachers/requests", {
+        credentials: "include",
+        signal: controller.signal,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.success === false) throw new Error(data.message || "Failed to load inquiries");
+      if (isMounted) setRequests(Array.isArray(data.requests) ? data.requests : []);
     } catch (err) {
-      setError(err.message);
+      if (err.name !== "AbortError" && isMounted) setError(err.message || "Failed to load inquiries");
     } finally {
-      setLoading(false);
+      if (isMounted) setLoading(false);
     }
   };
     fetchRequests();
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, []);
 
   const handleStatusUpdate = async (requestId, status) => {
+    setError(null);
     try {
-      const res = await fetch(`/api/teachers/requests/${requestId}`, {
+      const res = await fetch(`/teachers/requests/${requestId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status })
+        credentials: "include",
+        body: JSON.stringify({ status }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Status update failed");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.success === false) throw new Error(data.message || "Status update failed");
 
       // Update state locally
       setRequests((prev) =>
         prev.map((r) => (r._id === requestId ? { ...r, status } : r))
       );
     } catch (err) {
-      alert(err.message);
+      setError(err.message || "Status update failed");
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] py-8">
+    <div className="min-h-screen bg-[#f8fafc] pt-8 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-slate-900">Student Requests</h1>
           <p className="text-xs text-slate-500 mt-1">Manage incoming lesson bookings and inquiries</p>
         </div>
+
+        {error && requests.length > 0 && (
+          <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+            {error}
+          </div>
+        )}
 
         {loading ? (
           <div className="space-y-4">

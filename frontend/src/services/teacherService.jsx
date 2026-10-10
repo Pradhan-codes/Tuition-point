@@ -7,6 +7,7 @@ export async function searchTeachers({
   subject,
   maxPrice,
   teachingMode,
+  signal,
 }) {
   const params = new URLSearchParams({
     lng,
@@ -16,8 +17,8 @@ export async function searchTeachers({
     limit,
   });
 
-  if (subject) {
-    params.append("subject", subject);
+  if (subject && subject.trim()) {
+    params.append("subject", subject.trim());
   }
 
   if (maxPrice) {
@@ -28,12 +29,47 @@ export async function searchTeachers({
     params.append("mode", teachingMode);
   }
 
-  const response = await fetch(`/students/search?${params.toString()}`);
+  const response = await fetch(`/students/search?${params.toString()}`, {
+    signal,
+    credentials: "include",
+  });
 
-  const data = await response.json();
+  const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
     throw new Error(data.message || "Failed to fetch teachers");
+  }
+
+  return data;
+}
+
+export async function getTeacherById(id, signal) {
+  const response = await fetch(`/teachers/${id}`, {
+    signal,
+    credentials: "include",
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to load tutor details");
+  }
+
+  return data;
+}
+
+export async function createBookingRequest({ teacherId, subject, mode, message }) {
+  const response = await fetch("/students/requests", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ teacherId, subject, mode, message }),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.message || data.errors?.[0]?.msg || "Failed to send booking request");
   }
 
   return data;

@@ -8,26 +8,33 @@ export default function StudentRequests() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const controller = new AbortController();
     let isMounted = true;
     const fetchRequests = async () => {
       try {
-        const res = await fetch("/students/requests");
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Could not fetch requests");
-        if (isMounted) setRequests(data.requests || []);
+        const res = await fetch("/students/requests", {
+          credentials: "include",
+          signal: controller.signal,
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.success === false) throw new Error(data.message || "Could not fetch requests");
+        if (isMounted) setRequests(Array.isArray(data.requests) ? data.requests : []);
       } catch (err) {
-        if (isMounted) setError(err.message);
+        if (err.name !== "AbortError" && isMounted) setError(err.message || "Could not fetch requests");
       } finally {
         if (isMounted) setLoading(false);
       }
     };
 
     fetchRequests();
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] py-8">
+    <div className="min-h-screen bg-[#f8fafc] pt-8 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-slate-900">My Requests</h1>

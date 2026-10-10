@@ -42,9 +42,18 @@ export const login = async (req, res) => {
             const signedToken = generateToken(existingUser._id, existingUser.role)
             res.cookie("loginCookie", signedToken, {
                 httpOnly: true,
-                samSite: "lax",
+                sameSite: "lax",
                 secure: false
-            }).status(201).json({success: true, message: "login successful"})
+            }).status(200).json({
+                success: true,
+                message: "Login successful",
+                user: {
+                    id: existingUser._id,
+                    name: existingUser.name,
+                    email: existingUser.email,
+                    role: existingUser.role
+                }
+            });
         }else{
             return res.status(500).json({success: false, message: "Login failed."})
         }
@@ -60,7 +69,31 @@ export const logOut = async (req, res) => {
     res.clearCookie("loginCookie", {
         httpOnly: true,
         secure: false,
-        samSite: "lax"
+        sameSite: "lax"
     })
     return res.status(200).json({success: true, message: "Logged out successfully."})
 }
+
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};

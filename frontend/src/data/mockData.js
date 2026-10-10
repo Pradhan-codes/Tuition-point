@@ -15,7 +15,6 @@ export const HERO_DATA = {
   headlineHighlight: "Near You.",
   subtitle: "Discover tutors based on what you want to learn, where you live, your budget, and how you want to learn.",
   defaultSubject: "A-Level Maths",
-  defaultLocation: "Kensington, London · 2 mi radius",
   trendingSubjects: [
     "GCSE Maths",
     "A-Level Chemistry",

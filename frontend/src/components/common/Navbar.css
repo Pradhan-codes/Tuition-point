@@ -1,4 +1,4 @@
-﻿.navbar-header {
+.navbar-header {
   position: sticky;
   top: 0;
   z-index: 50;
@@ -121,4 +121,58 @@
   .become-tutor-link {
     display: none;
   }
+
+  /* The menu control is a placeholder; hide it where the login action needs room. */
+  .navbar-actions .icon-button {
+    display: none;
+  }
+}
+
+/* Initials avatar — shown when user is logged in (replaces image avatar) */
+.navbar-avatar-initial {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.navbar-avatar-initial:hover {
+  opacity: 0.85;
+}
+
+/* Log In button — shown in logged-out state */
+.navbar-login-btn {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-primary-border);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.navbar-login-btn:hover {
+  background-color: var(--color-primary-border);
+}
+
+/* User first name shown as dashboard link when logged in */
+.navbar-user-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  text-decoration: none;
+}
+
+.navbar-user-name:hover {
+  color: var(--color-primary);
 }

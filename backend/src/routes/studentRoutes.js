@@ -2,12 +2,14 @@ import e from "express";
 import { updateStudentProfile, getStudentProfile } from "../controllers/studentController.js";
 import { createRequest, getMyRequests } from "../controllers/requestController.js";
 import { authenticate, authorize } from "../middlewares/authMiddleware.js";
-import { validateStudentProfile, validateCreateRequest } from "../middlewares/validate.js";
+import { validateStudentProfile, validateCreateRequest, validateLocationQuery } from "../middlewares/validate.js";
 import { searchTeachers } from "../controllers/teacherController.js";
+import { geocodeLocation } from "../controllers/locationController.js";
 
 export const studenRouter = e.Router()
 
 studenRouter.get("/search", searchTeachers)
+studenRouter.get("/geocode", validateLocationQuery, geocodeLocation)
 studenRouter.use(authenticate, authorize("student"));
 studenRouter.route("/profile").get(getStudentProfile).post(validateStudentProfile, updateStudentProfile);
 

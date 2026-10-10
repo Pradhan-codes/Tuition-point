@@ -15,9 +15,9 @@ export default function TeacherHeader({ name, rating = 4.9, reviewCount = 28 }) 
         <div className="w-24 h-24 rounded-2xl bg-blue-100 text-blue-700 text-2xl font-extrabold flex items-center justify-center border-2 border-blue-200 shadow-sm">
           {initials}
         </div>
-        <div className="text-center md:text-left">
+        <div className="min-w-0 text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-2">
-            <h1 className="text-2xl font-bold text-slate-900">{name || "Tutor Profile"}</h1>
+            <h1 className="break-words text-2xl font-bold text-slate-900">{name || "Tutor Profile"}</h1>
             <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold px-2 py-0.5 rounded-md">
               <ShieldCheck size={14} /> Verified DBS
             </span>

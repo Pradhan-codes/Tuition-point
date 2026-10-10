@@ -7,10 +7,13 @@ export const authenticate = (req, res, next) => {
     try{
         const token = req.cookies.loginCookie
         if(!token){
-            return res.json({success: false, message: "Authentication required."})
+            return res.status(401).json({success: false, message: "Authentication required."})
         }
         const verify = jwt.verify(token, process.env.JWT_SECRET_KEY)
         req.user = verify
+        if (req.user && req.user.id && !req.user._id) {
+            req.user._id = req.user.id;
+        }
         next();
     }catch(err){
         console.log("JWT ERROR:", err.message);

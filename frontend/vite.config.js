@@ -5,16 +5,22 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    proxy: {
-      '/students': {
-        target: 'http://localhost:4000',
-        changeOrigin: true,
-      },
+  proxy: {
+    '/students': {
+      target: 'http://localhost:4000',
+      changeOrigin: true,
+    },
 
-      '/teachers': {
-        target: 'http://localhost:4000',
-        changeOrigin: true,
-      },
+    '/teachers': {
+      target: 'http://localhost:4000',
+      changeOrigin: true,
+    },
+
+    '/api/auth': {
+      target: 'http://localhost:4000',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api/, ''),
     },
   },
+},
 })

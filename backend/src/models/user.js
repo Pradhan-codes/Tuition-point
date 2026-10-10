@@ -28,7 +28,7 @@ const userSchema = new Schema({
     },
     phone: {
         type: String,
-        trime: true
+        trim: true
     }
 }, 
 {

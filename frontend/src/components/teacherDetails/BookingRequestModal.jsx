@@ -1,34 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Send } from "lucide-react";
+import { createBookingRequest } from "../../services/teacherService";
 
-export default function BookingRequestModal({ isOpen, onClose, teacherId, subjects = [], onSuccess }) {
-  const [subject, setSubject] = useState(subjects[0] || "");
+export default function BookingRequestModal({ isOpen, onClose, teacherId, subjects = [], teachingMode, onSuccess }) {
+  const [selectedSubject, setSelectedSubject] = useState("");
   const [mode, setMode] = useState("online");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    if (isOpen) {
+      setMode(teachingMode === "home" ? "home" : "online");
+    } else {
+      setSelectedSubject("");
+      setMode("online");
+      setMessage("");
+      setError(null);
+    }
+  }, [isOpen, teachingMode]);
+
   if (!isOpen) return null;
+
+  const subjectToBook = selectedSubject || subjects[0] || "";
+  const availableModes = teachingMode === "both"
+    ? ["online", "home"]
+    : [teachingMode === "home" ? "home" : "online"];
+
+  const handleClose = () => {
+    setError(null);
+    setMessage("");
+    setSelectedSubject("");
+    onClose();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return; // prevent duplicate submissions
+
+    if (!teacherId) {
+      setError("Teacher identifier missing. Please refresh and try again.");
+      return;
+    }
+
+    if (!subjectToBook) {
+      setError("Please select a subject.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      const res = await fetch("/students/requests", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ teacherId, subject, mode, message })
+      await createBookingRequest({
+        teacherId,
+        subject: subjectToBook,
+        mode,
+        message,
       });
-      const data = await res.json();
 
-      if (!res.ok) throw new Error(data.message || "Failed to send request");
-
-      onSuccess();
+      onSuccess?.();
       onClose();
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Failed to submit request.");
     } finally {
       setLoading(false);
     }
@@ -36,8 +70,8 @@ export default function BookingRequestModal({ isOpen, onClose, teacherId, subjec
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+      <div className="max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-xl relative">
+        <button onClick={handleClose} disabled={loading} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 disabled:opacity-50">
           <X size={20} />
         </button>
 
@@ -54,8 +88,8 @@ export default function BookingRequestModal({ isOpen, onClose, teacherId, subjec
           <div>
             <label className="block text-xs font-semibold text-slate-600 mb-1">Select Subject</label>
             <select
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
+              value={subjectToBook}
+              onChange={(e) => setSelectedSubject(e.target.value)}
               className="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-blue-600 bg-white"
             >
               {subjects.map((sub, i) => (
@@ -67,7 +101,7 @@ export default function BookingRequestModal({ isOpen, onClose, teacherId, subjec
           <div>
             <label className="block text-xs font-semibold text-slate-600 mb-1">Learning Mode</label>
             <div className="grid grid-cols-2 gap-2">
-              {["online", "home"].map((m) => (
+              {availableModes.map((m) => (
                 <button
                   key={m}
                   type="button"

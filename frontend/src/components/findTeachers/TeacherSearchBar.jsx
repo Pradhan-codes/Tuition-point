@@ -3,10 +3,13 @@ import { Search, MapPin, SlidersHorizontal } from "lucide-react";
 export default function TeacherSearchBar({
   subject,
   setSubject,
+  location,
+  setLocation,
   locationName,
   radius,
   setRadius,
   onSubmit,
+  resolvingLocation = false,
 }) {
   return (
     <section className="bg-slate-50">
@@ -34,14 +37,22 @@ export default function TeacherSearchBar({
             <div className="flex flex-1 items-center gap-3 rounded-xl border border-slate-200 px-4 py-3">
               <MapPin size={20} className="shrink-0 text-blue-500" />
 
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-xs font-medium text-slate-400">
                   Location
                 </p>
-
-                <p className="truncate text-sm font-medium text-slate-700">
-                  {locationName || "Your location"}
-                </p>
+                <input
+                  type="text"
+                  value={location}
+                  onChange={setLocation}
+                  placeholder="Enter a city or postal code"
+                  aria-label="Search location"
+                  required
+                  className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none placeholder:text-slate-400"
+                />
+                {locationName && locationName !== location && (
+                  <p className="truncate text-xs text-slate-500">Search area: {locationName}</p>
+                )}
               </div>
             </div>
 
@@ -78,14 +89,18 @@ export default function TeacherSearchBar({
             {/* Search button */}
             <button
               type="submit"
-              className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
+              disabled={resolvingLocation}
+              className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98] disabled:cursor-wait disabled:opacity-60"
             >
               <Search size={18} />
-              Search
+              {resolvingLocation ? "Finding location…" : "Search"}
             </button>
 
           </div>
         </form>
+        <p className="px-2 pt-2 text-xs text-slate-500">
+          Location results © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer" className="underline hover:text-slate-700">OpenStreetMap contributors</a>
+        </p>
       </div>
     </section>
   );

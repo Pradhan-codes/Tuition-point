@@ -1,4 +1,5 @@
 import { EDUCATOR_CTA_DATA } from '../../data/mockData';
+import { useNavigate } from 'react-router-dom';
 import './EducatorBanner.css';
 
 /**
@@ -13,6 +14,7 @@ import './EducatorBanner.css';
  * - 'Start Tutoring' can route to `/teacher-onboarding` or trigger an auth modal.
  */
 const EducatorBanner = () => {
+  const navigate = useNavigate();
   return (
     <section className="educator-section">
       <div className="container">
@@ -38,7 +40,7 @@ const EducatorBanner = () => {
             <button
               type="button"
               className="educator-primary-btn"
-              onClick={() => console.log('Start Tutoring clicked')}
+              onClick={() => navigate('/auth/register')}
             >
               <span>{EDUCATOR_CTA_DATA.primaryButtonText}</span>
             </button>

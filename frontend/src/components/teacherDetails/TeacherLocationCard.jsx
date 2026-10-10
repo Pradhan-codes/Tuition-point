@@ -6,7 +6,7 @@ export default function TeacherLocationCard({ distanceKm, hourlyRate, onBookClic
     <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5 sticky top-24">
       <div className="flex items-baseline justify-between border-b border-slate-100 pb-4">
         <div>
-          <span className="text-3xl font-extrabold text-slate-900">${hourlyRate || 0}</span>
+          <span className="text-3xl font-extrabold text-slate-900">₹{hourlyRate ?? "—"}</span>
           <span className="text-sm text-slate-500 font-medium"> / hr</span>
         </div>
         <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-md">

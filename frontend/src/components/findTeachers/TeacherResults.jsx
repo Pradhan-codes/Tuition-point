@@ -30,14 +30,14 @@ export default function TeacherResults({
 
   return (
     <section className="bg-slate-50">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pt-8 pb-24 sm:py-8 sm:px-6 lg:px-8">
 
         {/* Results heading */}
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
             <h2 className="text-xl font-bold text-slate-900">
               {teachers.length > 0
-                ? "Teachers near you"
+                ? "Teachers near your search area"
                 : "No teachers found"}
             </h2>
 
